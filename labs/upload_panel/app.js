@@ -5,56 +5,68 @@ const fs = require("fs");
 const app = express();
 const PORT = 3000;
 
-// server 
-app.use("/uploads",express.static(path.join(__dirname,"uploads")));
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
+
+app.use("/uploads", express.static(uploadDir));
 
 const storage = multer.diskStorage({
-                destination :(req,file,cb) => {cb(null,"uploads/");},
-                filename:(req,file,cb) => {
-                  cb(null,Date.now() + path.extname(file.originalname));
-                }  
+    destination: (req, file, cb) => {
+        cb(null, "uploads/");
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
 });
 
-const upload = multer({storage});
+const upload = multer({ storage });
 
-// home page 
-
-app.get("/",(req,res) => {
-                           res.sendFile(
-                            path.join(__dirname,"index.html"));
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
 });
 
-app.get("/uploads",(req,res) => {fs.readdir("/uploads",(err,files) => { 
-                                  if (err){
-                                    return res.status(500).send("Error reading upload folder");
-                                  }       
-                                  let html = ` 
-                                      <h1>Uploaded Files<h1>
-                                      <a> href="/">upload New File</a><hr>
-                                  `;
-                                  files.forEach(file => {
-const ext = path.extname(file).toLowerCase();
+app.post("/upload", upload.single("file"), (req, res) => {
+    if (!req.file) {
+        return res.status(400).send("No file uploaded.");
+    }
+    res.send('File uploaded successfully! <a href="/files">View Files</a>');
+});
 
-              if ([".jpg",".jpeg",".png",".gif",".webp"].includes(ext)){
-                  html +=`<div style="margin:20px0"> <img src="/uploads/${file}" width="300"><br>
-                             <a href="/uploads/${file}" target="_blank">${file}</a> </div>`;
+app.get("/files", (req, res) => {
+    fs.readdir(uploadDir, (err, files) => {
+        if (err) {
+            return res.status(500).send("Error reading upload folder");
+        }
+
+        let html = `
+            <h1>Uploaded Files</h1>
+            <a href="/">Upload New File</a><hr>
+        `;
+
+        files.forEach(file => {
+            const ext = path.extname(file).toLowerCase();
+
+            if ([".jpg", ".jpeg", ".png", ".gif", ".webp"].includes(ext)) {
+                html += `
+                    <div style="margin: 20px 0;">
+                        <img src="/uploads/${file}" width="300"><br>
+                        <a href="/uploads/${file}" target="_blank">${file}</a>
+                    </div>`;
             } else {
-                 html +=`<p>
-                             <a href="uploads/${file}" target="_blank">${file}</a>
-                        </p>
-                     `;
+                html += `
+                    <p>
+                        <a href="/uploads/${file}" target="_blank">${file}</a>
+                    </p>`;
             }
-          });
+        });
 
-          res.send(html);
+        res.send(html);
     });
 
+  });
+
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
 });
- 
-app.listen(PORT,() => { console.log(`Server running on http://localhost:${PORT}`)});
-
-
-
-
-
-
