@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+
 const app = express();
 const PORT = 3000;
 
@@ -14,7 +15,7 @@ app.use("/uploads", express.static(uploadDir));
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "uploads/");
+        cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname));
@@ -64,8 +65,7 @@ app.get("/files", (req, res) => {
 
         res.send(html);
     });
-
-  });
+});
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
