@@ -1,20 +1,309 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-   <title>File Upload</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIF Upload Portal</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f1f5f9;
+            --accent-color: #8b5cf6;
+            --accent-hover: #7c3aed;
+            --error-color: #ef4444;
+            --success-color: #10b981;
+            --border-color: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .portal-container {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        h1 {
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+            background: linear-gradient(to right, #c084fc, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--accent-color);
+            border-radius: 1rem;
+            padding: 3rem 2rem;
+            background-color: rgba(15, 23, 42, 0.5);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .upload-area:hover {
+            background-color: rgba(139, 92, 246, 0.1);
+            border-color: var(--accent-hover);
+        }
+
+        .upload-area.dragover {
+            background-color: rgba(139, 92, 246, 0.2);
+            border-color: var(--accent-color);
+        }
+
+        .upload-area input[type="file"] {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        .upload-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .allowed-types {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .file-display {
+            margin-top: 1.5rem;
+            background-color: rgba(15, 23, 42, 0.8);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            display: none; /* Controlled via JS */
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid var(--border-color);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-align: left;
+            overflow: hidden;
+        }
+
+        .file-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 250px;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--error-color);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+        }
+
+        .remove-btn:hover {
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .submit-btn {
+            margin-top: 2rem;
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .submit-btn:disabled {
+            background-color: #334155;
+            cursor: not-allowed;
+            color: #64748b;
+        }
+    </style>
 </head>
 <body>
 
-    <h1>Upload File</h1>
+<div class="portal-container">
+    <h1>GIF Portal</h1>
+    <p>Upload your favorite animated GIFs securely.</p>
 
-    <form action="/upload" method="Post" enctype="multipart/form-data">
-        <input type="file" name="file" required>
-        <button type="sumit">Upload</button>
-   </form>    
+    <div class="upload-area" id="dropZone">
+        <div class="upload-icon">📁</div>
+        <div class="upload-text">Drag & Drop GIF here</div>
+        <div class="upload-text" style="font-size: 0.9rem; color: #94a3b8; margin-top: 0.25rem;">or click to browse</div>
+        <input type="file" id="fileInput" accept=".gif">
+    </div>
 
-  <br>
+    <div class="error-message" id="errorMessage">Invalid file type! Please upload a .gif file.</div>
 
-  <a href="/uploads">View Uploaded Files</a>
+    <div class="file-display" id="fileDisplay">
+        <div class="file-info">
+            <span>🖼️</span>
+            <div class="file-name" id="fileName">file.gif</div>
+        </div>
+        <button class="remove-btn" id="removeBtn">✖</button>
+    </div>
 
-</body>   
-</htm
+    <button class="submit-btn" id="submitBtn" disabled>Upload GIF</button>
+    <p style="margin-top: 15px;"><a href="/files" style="color: var(--accent-color); text-decoration: none;">View Uploaded Gallery</a></p>
+</div>
+
+<script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const fileDisplay = document.getElementById('fileDisplay');
+    const fileNameDisplay = document.getElementById('fileName');
+    const errorMessage = document.getElementById('errorMessage');
+    const removeBtn = document.getElementById('removeBtn');
+    const submitBtn = document.getElementById('submitBtn');
+
+    let selectedFile = null;
+
+    function handleFile(file) {
+        errorMessage.style.display = 'none';
+        if (!file) return;
+
+        // Validate if file is a GIF
+        if (file.type === 'image/gif' || file.name.endsWith('.gif')) {
+            selectedFile = file; 
+            fileDisplay.style.display = 'flex';
+            fileNameDisplay.textContent = selectedFile.name;
+            submitBtn.disabled = false;
+        } else {
+            errorMessage.textContent = "Invalid file type! Please upload a .gif file.";
+            errorMessage.style.display = 'block';
+            fileDisplay.style.display = 'none';
+            submitBtn.disabled = true;
+            fileInput.value = ''; 
+            selectedFile = null;
+        }
+    }
+
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleFile(e.target.files[0]);
+        }
+    });
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        }, false);
+    });
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'));
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'));
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFile(files[0]);
+        }
+    });
+
+    removeBtn.addEventListener('click', () => {
+        fileDisplay.style.display = 'none';
+        submitBtn.disabled = true;
+        fileInput.value = '';
+        selectedFile = null;
+    });
+
+    submitBtn.addEventListener('click', () => {
+        if (!selectedFile) return;
+
+        const formData = new FormData();
+        // FIXED: Key field changed to 'file' to match server-side upload.single("file")
+        formData.append('file', selectedFile); 
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Uploading...';
+
+        fetch('/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                fileDisplay.style.display = 'none';
+                fileInput.value = '';
+                selectedFile = null;
+            } else {
+                errorMessage.textContent = data.message;
+                errorMessage.style.display = 'block';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            errorMessage.textContent = 'An error occurred during upload.';
+            errorMessage.style.display = 'block';
+        })
+        .finally(() => {
+            submitBtn.textContent = 'Upload GIF';
+        });
+    });
+</script>
+
+</body>
+</html>
