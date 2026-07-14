@@ -36,21 +36,22 @@ app.post("/upload", upload.single("file"), (req, res) => {
         });
  }
 
+if (path.extname(req.file.originalname).toLowerCase() !== '.git'){
+    fs.unlikeSync(req.file.path);
+    return res.status(400).json({
+        success:false,
+        message:"Invalid file type . GIF only allowed.!"
+    });
+}
 
+return res.json({
+      success:true,
+      message:"File upload successfully",
+      file: req.file.filename
+    });
 
+});
 
-
-
-
-
-
-
-
-
-
-
-
- 
 app.get("/files", (req, res) => {
     fs.readdir(uploadDir, (err, files) => {
         if (err) {
