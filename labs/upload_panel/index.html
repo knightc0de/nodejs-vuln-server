@@ -210,26 +210,22 @@
     const removeBtn = document.getElementById('removeBtn');
     const submitBtn = document.getElementById('submitBtn');
 
-    let selectedFile = null;
 
     function handleFile(file) {
-        errorMessage.style.display = 'none';
-        if (!file) return;
+    errorMessage.style.display = 'none';
 
-        if (file.type === 'image/gif' || file.name.endsWith('.gif', "jpeg", "png")) {
-            selectedFile = file; 
-            fileDisplay.style.display = 'flex';
-            fileNameDisplay.textContent = selectedFile.name;
-            submitBtn.disabled = false;
-        } else {
-            errorMessage.textContent = "Invalid file type! Please upload a .gif file.";
-            errorMessage.style.display = 'block';
-            fileDisplay.style.display = 'none';
-            submitBtn.disabled = true;
-            fileInput.value = ''; 
-            selectedFile = null;
-        }
-    }
+    if (!file) return;
+
+    selectedFile = file;
+
+    fileDisplay.style.display = 'flex';
+    fileNameDisplay.textContent = file.name;
+
+    submitBtn.disabled = false;
+}
+
+
+
 
     dropZone.addEventListener('click', () => fileInput.click());
 
