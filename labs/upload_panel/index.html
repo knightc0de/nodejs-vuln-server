@@ -183,6 +183,8 @@
         <div class="upload-icon">📁</div>
         <div class="upload-text">Drag & Drop GIF here</div>
         <div class="upload-text" style="font-size: 0.9rem; color: #94a3b8; margin-top: 0.25rem;">or click to browse</div>
+       <input type="file" id="fileInput" accept="image/*,.gif,.jpeg,.png">
+
     </div>
 
     <div class="error-message" id="errorMessage">Invalid file type! Please upload a .gif file.</div>
@@ -214,8 +216,7 @@
         errorMessage.style.display = 'none';
         if (!file) return;
 
-        // Validate if file is a GIF
-        if (file.type === 'image/gif' || file.name.endsWith('.gif')) {
+        if (file.type === 'image/gif' || file.name.endsWith('.gif', "jpeg", "png")) {
             selectedFile = file; 
             fileDisplay.style.display = 'flex';
             fileNameDisplay.textContent = selectedFile.name;
