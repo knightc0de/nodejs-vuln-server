@@ -1,0 +1,192 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(circle farthest-side at 0% 50%, #14100a 23.5%, rgba(255,170,0,0) 0) 21px 30px,
+    radial-gradient(circle farthest-side at 0% 50%, #1c150c 24%, rgba(240,166,17,0) 0) 19px 30px,
+    linear-gradient(#14100a 14%, rgba(240,166,17,0) 0, rgba(240,166,17,0) 85%, #14100a 0),
+    linear-gradient(150deg,#14100a 24%,#1c150c 0,#1c150c 26%,transparent 0,transparent 74%,#1c150c 0,#1c150c 76%,#14100a 0),
+    linear-gradient(30deg,#14100a 24%,#1c150c 0,#1c150c 26%,transparent 0,transparent 74%,#1c150c 0,#1c150c 76%,#14100a 0),
+    linear-gradient(90deg,#1c150c 2%,#14100a 0,#14100a 98%,#1c150c 0) #14100a;
+  background-size: 40px 60px;
+  font-family: "Courier New", monospace;
+  color: #d4c9a8;
+  animation: crt 6s infinite;
+}
+
+@keyframes crt {
+  93% { opacity: .95; }
+  94%, 100%, 0% { opacity: 1; }
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 46px;
+  background: #1a1108;
+  border-bottom: 1px solid #3a2c12;
+  z-index: 10;
+}
+
+.navbar:before {
+  content: "";
+  position: absolute;
+  left: 20px;
+  top: 17px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ff5f56;
+  box-shadow: 20px 0 #ffbd2e, 40px 0 #27c93f;
+}
+
+.navbar:after {
+  content: "root@secure-bank: ~/portal";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 15px;
+  color: #8a7a52;
+  font-size: 12px;
+}
+
+.portal-container {
+  width: 90%;
+  max-width: 480px;
+  margin: 60px auto 20px auto; 
+  background: #120d06;
+  border: 1px solid #3a2c12;
+  border-radius: 8px;
+  padding: 2.5rem;
+  box-shadow: 0 0 0 1px rgba(255, 176, 0, .05) inset, 0 12px 30px rgba(0, 0, 0, .6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+h1 {
+  color: #ffb000;
+  text-align: center;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #8a7a52;
+  margin-bottom: 25px;
+  font-size: 13px;
+}
+
+.card-display {
+  width: 100%;
+  margin-top: 10px;
+  border: 1px solid #ff8800;
+  border-radius: 10px;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #1a1108 0%, #24180b 100%);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.card-chip {
+  width: 40px;
+  height: 30px;
+  background: #ffb000;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+.card-number {
+  font-size: 1.2rem;
+  letter-spacing: 3px;
+  color: #ffb000;
+  margin-bottom: 20px;
+  text-align: center;
+  text-shadow: 0 0 5px rgba(255, 176, 0, 0.3);
+}
+
+.card-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.card-holder label, .card-expiry label, .card-cvv label {
+  display: block;
+  font-size: 10px;
+  color: #8a7a52;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.card-holder div, .card-expiry div, .card-cvv div {
+  color: #d4c9a8;
+  font-weight: bold;
+}
+
+.balance-box {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px 16px;
+  border: 1px solid #3a2c12;
+  background: #0d0904;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.balance-amount {
+  color: #27c93f;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.submit-btn {
+  margin-top: 20px;
+  width: 100%;
+  padding: 14px;
+  background: #ff8800;
+  color: #120d06;
+  border: none;
+  font-weight: bold;
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.submit-btn:hover {
+  background: #ffb000;
+}
+
+.loader, .error {
+  text-align: center;
+  margin-top: 2rem;
+  color: #ff6666;
+}
