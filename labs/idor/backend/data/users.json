@@ -1,0 +1,44 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "elon musk",
+      "card": {
+        "balence": "590.14",
+        "cvv": "688",
+        "expires": "14/27",
+        "number": "1212 1212 1212 1212"
+      }
+    },
+    {
+      "id": "2",
+      "name": "you",
+      "card": {
+        "balence": "640000.00",
+        "cvv": "608",
+        "expires": "12/29",
+        "number": "1234 1234 1234 1234"
+      }
+    },
+    {
+      "id": "3",
+      "name": "jane doe",
+      "card": {
+        "balence": "153.43",
+        "cvv": "809",
+        "expires": "15/29",
+        "number": "1423 1423 1423 1423"
+      }
+    },
+    {
+      "id": "4",
+      "name": "john doe",
+      "card": {
+        "balence": "1423.12",
+        "cvv": "709",
+        "expires": "16/28",
+        "number": "6534 6534 6434 6534"
+      }
+    }
+  ]
+}
