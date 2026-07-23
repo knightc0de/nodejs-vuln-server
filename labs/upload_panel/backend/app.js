@@ -87,5 +87,5 @@ app.get("/files", (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server Started on http://localhost:${PORT}`);
+    console.log(` Vuln Server Started on  http://localhost:${PORT}`);
 });
